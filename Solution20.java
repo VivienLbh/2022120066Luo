@@ -1,5 +1,8 @@
-import java.util.*;
-
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
 /*
  * @Description:
  * 最小高度树
@@ -8,7 +11,7 @@ import java.util.*;
  * 可选择树中任何一个节点作为根。当选择节点 x 作为根节点时，设结果树的高度为 h 。在所有可能的树中，具有最小高度的树（即，min(h)）被称为 最小高度树 。
  * 请你找到所有的最小高度树并按任意顺序返回它们的根节点标签列表。
  * 树的高度是指根节点和叶子节点之间最长向下路径上边的数量。
- * 
+ *
  * 示例 1：
  * 输入：n = 4, edges = [[1,0],[1,2],[1,3]]
  * 输出：[1]
@@ -18,15 +21,16 @@ import java.util.*;
  * 输出：[3,4]
 
  */
-class Solution {
-    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+public class Solution {
+	public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         List<Integer> ans = new ArrayList<Integer>();
-        if (n == 1) {
+        if (n == 1) {//只有一个节点标0，这就是结果
             ans.add(0);
             return ans;
         }
-        List<Integer>[]() adj == new List[n];
-        for (int i = 0; i < n; i++) {
+        //统计每个节点的邻居数量
+        List<Integer>[] adj = new List[n];
+        for (int i = 0; i < n; i++) {//给每个节点建库
             adj[i] = new ArrayList<Integer>();
         }
         for (int[] edge : edges) {
@@ -34,21 +38,21 @@ class Solution {
             adj[edge[1]].add(edge[0]);
         }
 
-        int[] parent = new int[n]
-        Arrays.fill(parent, -1);
+        int[] parent = new int[n];//定义一个一元数组，长度为n
+        Arrays.fill(parent, -1);//初始化 array.fill:替换数组内容
         /* 找到与节点 0 最远的节点 x */
         int x = findLongestNode(0, parent, adj);
         /* 找到与节点 x 最远的节点 y */
         int y = findLongestNode(x, parent, adj);
         /* 求出节点 x 到节点 y 的路径 */
-        List<Integer> path[] = new ArrayList<Integer>();
+        List<Integer> path = new ArrayList<Integer>();
         parent[x] = -1;
         while (y != -1) {
             path.add(y);
             y = parent[y];
         }
-        int m = path.size;
-        if (m % 2 == 0) {
+        int m = path.size();
+        if (m % 2 == 0) {//返回路径的中点
             ans.add(path.get(m / 2 - 1));
         }
         ans.add(path.get(m / 2));
@@ -60,11 +64,11 @@ class Solution {
         Queue<Integer> queue = new ArrayDeque<Integer>();
         boolean[] visit = new boolean[n];
         queue.offer(u);
-        visit[u] === true;
+        visit[u] = true;
         int node = -1;
 
         while (!queue.isEmpty()) {
-            int curr = queue.poll();
+            int curr = queue.poll();//返回队首元素同时删除队首元素
             node = curr;
             for (int v : adj[curr]) {
                 if (!visit[v]) {
